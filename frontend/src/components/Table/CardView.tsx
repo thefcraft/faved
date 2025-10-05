@@ -19,16 +19,22 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 
 export const CardView: React.FC<{ el: any }> = observer(({ el }) => {
     const store = React.useContext(StoreContext);
+    const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
+
     return (
-
-        <div className='flex flex-col justify-between h-full'>
-
+        <div className='flex flex-col h-full group'>
+            {el.image && (
+                <div className="mt-[-24px]"><a href={el.image} target='_blank'>
+                    <img className="w-[100%] h-auto max-h-[200px] mb-3 rounded-tl-[13px] rounded-tr-[13px]" src={el.image} />
+                </a> </div>
+            )}
             <CardHeader>
-                <CardAction>
-                    <DropdownMenu>
+                <CardAction className={`transition-opacity duration-200 ${isDropdownOpen ? 'opacity-100' : 'opacity-100 md:opacity-0 md:group-hover:opacity-100'
+                    }`}>
+                    <DropdownMenu onOpenChange={setIsDropdownOpen}>
                         <DropdownMenuTrigger asChild>
                             <Button
-                                variant="link"
+                                variant="secondary"
                                 className="data-[state=open]:bg-muted text-muted-foreground flex size-8 absolute top-2 right-2"
                                 size="icon"
                             >
@@ -80,11 +86,6 @@ export const CardView: React.FC<{ el: any }> = observer(({ el }) => {
                     </DropdownMenu>
                 </CardAction>
                 <div className="flex flex-col items-start w-full text-left wrap-anywhere gap-2">
-                    {el.image && (
-                        <a href={el.image} target='_blank'>
-                            <img className="w-auto h-auto max-h-[200px] mb-3 rounded-sm" src={el.image} />
-                        </a>
-                    )}
 
                     {el.title && (<CardTitle>
                         <h4 className="scroll-m-20 text-xl font-semibold tracking-tight line-clamp-3" title={el.title}>
@@ -124,8 +125,5 @@ export const CardView: React.FC<{ el: any }> = observer(({ el }) => {
                 </div>
             </CardFooter>
         </div>
-
-
     );
-
 });
