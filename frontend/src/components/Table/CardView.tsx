@@ -19,7 +19,6 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 
 export const CardView: React.FC<{ el: any }> = observer(({ el }) => {
     const store = React.useContext(StoreContext);
-    const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
 
     return (
         <div className='flex flex-col h-full group'>
@@ -29,13 +28,12 @@ export const CardView: React.FC<{ el: any }> = observer(({ el }) => {
                 </a> </div>
             )}
             <CardHeader>
-                <CardAction className={`transition-opacity duration-200 ${isDropdownOpen ? 'opacity-100' : 'opacity-100 md:opacity-0 md:group-hover:opacity-100'
-                    }`}>
-                    <DropdownMenu onOpenChange={setIsDropdownOpen}>
+                <CardAction>
+                    <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button
                                 variant="secondary"
-                                className="data-[state=open]:bg-muted text-muted-foreground flex size-8 absolute top-2 right-2"
+                                className="data-[state=open]:bg-muted text-muted-foreground flex  rounded-sm card-action cursor-pointer size-8 absolute top-2 right-2"
                                 size="icon"
                             >
                                 <IconDotsVertical />
