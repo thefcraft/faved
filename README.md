@@ -1,9 +1,9 @@
   
 #  <img height="27px" src="https://github.com/user-attachments/assets/f96ecc14-bc29-4769-828e-c94cb3c87b9e" /> Faved
 
-Faved is a simple self-hosted web application to store and organise web links. All data is stored locally.
+Faved is a simple self-hosted web application to store and organise web links. Works on desktop and mobile.
 
-100% free and open source. No ads, tracking, or data collection.
+Free and open source. No ads or tracking. All data is stored locally. 
 
 <div align="center">
   
@@ -11,23 +11,28 @@ Faved is a simple self-hosted web application to store and organise web links. A
 
 </div>
 
-<img width="1000" height="791" alt="screenshot-list-desktop-mobile-ff-small-compressorio" src="https://github.com/user-attachments/assets/58987e97-5ed3-4628-aed6-0756d6404c81" />
+<img width="2400" height="1400" alt="screenshot-list-desktop-mobile-safari" src="https://github.com/user-attachments/assets/9b5fb4d4-6b95-4fae-a9bd-fb1600a3d00c" />
 
 
 ## Features
 
-- **Clean Interface**: A distraction-free UI to help you quickly find and manage your bookmarks.
+- **Clean Interface**: A distraction-free responsive UI to help you quickly find and manage your bookmarks on any desktop or mobile device. Includes instant search, bookmark sorting, multiple layouts, and sleek dark mode.
 - **Advanced tagging system**: Organize bookmarks with colored nested tags. Pin important tags at the top for quick access.
-- **Browser bookmarklet**: Save bookmarks from any desktop or mobile browser without installing any extensions.
+- **Browser bookmarklet**: Save bookmarks from any desktop or mobile browser without installing any extensions. It is secure and convenient.
 - **Lightweight and swift**: Built with efficiency in mind, Faved loads fast and runs with minimal resource usage.
-- **One-click migration from Pocket**: easily move your saved links, tags, collections and notes from Pocket by uploading the exported ZIP file.
+- **Import from browser**: Importing bookmarks from Chrome, Safari, Firefox, Edge, fully preserving your browser bookmark folders structure.
+- **One-click migration from Pocket**: Easily move your saved links, tags, collections and notes from Pocket by uploading the exported ZIP file.
 - **Open Source**: The code is open for you to inspect, modify, and contribute to.
 
-## Requirements
+## Overview video
 
-- Docker
+https://github.com/user-attachments/assets/0ecbf26a-9ed8-49d9-a5ce-33d471c06fdf
 
 ## Installation
+
+Requirements: 
+- Docker
+
 ### Installation with Docker (fastest way to run locally)
 #### 1. Pull the latest stable image from Docker Hub
 
@@ -49,6 +54,8 @@ This command will:
 Once the container is running, you can access the Faved application in your web browser at http://localhost:8080. 
 
 The first time you visit, you'll be prompted to set up the database. Just click "Create Database" to proceed and finish the installation.
+
+--- 
 
 ### Installation using Docker Compose (recommended for server deployment)
 #### 1. Create a new directory for your Faved installation
@@ -113,6 +120,8 @@ If you changed the container name during installation, replace `faved` with the 
 ```bash
 docker run -d --name faved -p 8080:80 -v faved-data:/var/www/html/storage denho/faved
 ```
+
+---
 
 ### Updating using Docker Compose
 #### 1. Pull the latest `docker-compose.yml` [file from this repository](/docker-compose.yml) to your Faved instance directory
