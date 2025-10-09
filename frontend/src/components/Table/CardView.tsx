@@ -21,10 +21,13 @@ export const CardView: React.FC<{ el: any }> = observer(({ el }) => {
     const store = React.useContext(StoreContext);
 
     return (
-        <div className='flex flex-col h-full group'>
+        <div className='flex flex-col h-full hover-action-container'>
             {el.image && (
                 <div className="mt-[-24px]"><a href={el.image} target='_blank'>
-                    <img className="w-[100%] h-auto max-h-[200px] mb-3 rounded-tl-[13px] rounded-tr-[13px]" src={el.image} />
+                    <img
+                        className="w-[100%] h-[200px] mb-3 rounded-tl-[13px] rounded-tr-[13px] object-cover"
+                        src={el.image}
+                    />
                 </a> </div>
             )}
             <CardHeader>
@@ -33,7 +36,7 @@ export const CardView: React.FC<{ el: any }> = observer(({ el }) => {
                         <DropdownMenuTrigger asChild>
                             <Button
                                 variant="secondary"
-                                className="data-[state=open]:bg-muted text-muted-foreground flex  rounded-sm card-action cursor-pointer size-8 absolute top-2 right-2"
+                                className="hover:text-accent-foreground data-[state=open]:bg-muted border text-muted-foreground flex size-8 hover-action cursor-pointer absolute top-2 right-2"
                                 size="icon"
                             >
                                 <IconDotsVertical />
