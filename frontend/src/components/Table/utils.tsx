@@ -71,16 +71,22 @@ const DescriptionCellContent = ({ item }: { item: z.infer<typeof schema> }) => {
   const { comments, image, description } = item
 
   return (
-    <div className="flex flex-col items-start text-start w-full flex-wrap">
-      {image &&
+    <div className="flex flex-col items-start text-left w-full max-w-full">
+      {image && (
         <a href={image} target="_blank" rel="noopener noreferrer">
           <img className="w-auto h-auto max-h-[200px] rounded-sm" src={image} alt="Preview" />
         </a>
-      }
-      {description && (<p className="leading-7 [&:not(:first-child)]:mt-6 whitespace-pre-line">
-        {description}
-      </p>)}
-      {comments && (<blockquote className="mt-6 border-l-2 pl-6 italic whitespace-pre-line">{comments}</blockquote>)}
+      )}
+      {description && (
+        <p className="leading-7 [&:not(:first-child)]:mt-6 whitespace-pre-line break-words overflow-wrap-anywhere max-w-full">
+          {description}
+        </p>
+      )}
+      {comments && (
+        <blockquote className="mt-6 border-l-2 pl-6 italic whitespace-pre-line break-words overflow-wrap-anywhere max-w-full">
+          {comments}
+        </blockquote>
+      )}
     </div>
   )
 }
