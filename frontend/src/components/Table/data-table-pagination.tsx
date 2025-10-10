@@ -7,6 +7,7 @@ import {
 } from "lucide-react"
 import { Button } from "../ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
+import { getTableViewPreference } from "./utils"
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>
@@ -26,7 +27,7 @@ export function DataTablePagination<TData>({
       </div>
       <div className="flex flex-wrap items-center justify-center sm:justify-end gap-4 w-full sm:w-auto">
         <div className="flex items-center space-x-2">
-          <p className="text-sm font-medium hidden sm:block">Rows per page</p>
+          <p className="text-sm font-medium hidden sm:block">{`${getTableViewPreference() ? "Rows" : "Cards"} per page`}</p>
           <p className="text-sm font-medium sm:hidden">Rows:</p>
           <Select
             value={rowsPerPage.toString()}
