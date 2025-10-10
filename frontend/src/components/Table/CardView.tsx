@@ -23,12 +23,14 @@ export const CardView: React.FC<{ el: any }> = observer(({ el }) => {
     return (
         <div className='flex flex-col h-full hover-action-container'>
             {el.image && (
-                <div className="mt-[-24px]"><a href={el.image} target='_blank'>
-                    <img
-                        className="w-[100%] h-[200px] mb-3 rounded-tl-[13px] rounded-tr-[13px] object-cover"
-                        src={el.image}
-                    />
-                </a> </div>
+                <div className="mt-[-24px]">
+                    <a href={el.image} target='_blank'>
+                        <img
+                            className="w-full aspect-video mb-3 rounded-tl-[13px] rounded-tr-[13px] object-cover"
+                            src={el.image}
+                        />
+                    </a>
+                </div>
             )}
             <CardHeader>
                 <CardAction>
@@ -87,37 +89,47 @@ export const CardView: React.FC<{ el: any }> = observer(({ el }) => {
                     </DropdownMenu>
                 </CardAction>
                 <div className="flex flex-col items-start w-full text-left wrap-anywhere gap-2">
-
-                    {el.title && (<CardTitle>
-                        <h4 className="scroll-m-20 text-xl font-semibold tracking-tight line-clamp-3" title={el.title}>
-                            {el.title}
-                        </h4> </CardTitle>
+                    {el.title && (
+                        <CardTitle>
+                            <h4 className="scroll-m-20 text-xl font-semibold tracking-tight line-clamp-3" title={el.title}>
+                                {el.title}
+                            </h4>
+                        </CardTitle>
                     )}
-
-                    {el.url && (<a
-                        className="text-custom-blue underline break-all line-clamp-3"
-                        href={el.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        title={el.url}
-                    >
-                        {el.url}
-                    </a>)}
-                    {el.tags && (<div className="text-left w-full py-2 leading-6.5">
-                        {el.tags.map((tagID, index) => (
-                            <TagBadge key={index} tagID={tagID} />
-                        ))}
-                    </div>)}
-                    {(el.description || el.comments) && (<CardDescription>
-                        {el.description && (<div>
-                            <p className="leading-7 [&:not(:first-child)]:mt-6 whitespace-pre-line">
-                                {el.description}
-                            </p>
-                        </div>)}
-                        {el.comments && (<div>
-                            <blockquote className="mt-6 border-l-2 pl-6 italic whitespace-pre-line">{el.comments}</blockquote>
-                        </div>)}
-                    </CardDescription>)}
+                    {el.url && (
+                        <a
+                            className="text-custom-blue underline break-all line-clamp-3"
+                            href={el.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={el.url}
+                        >
+                            {el.url}
+                        </a>
+                    )}
+                    {el.tags && (
+                        <div className="text-left w-full py-2 leading-6.5">
+                            {el.tags.map((tagID, index) => (
+                                <TagBadge key={index} tagID={tagID} />
+                            ))}
+                        </div>
+                    )}
+                    {(el.description || el.comments) && (
+                        <CardDescription>
+                            {el.description && (
+                                <div>
+                                    <p className="leading-7 [&:not(:first-child)]:mt-6 whitespace-pre-line">
+                                        {el.description}
+                                    </p>
+                                </div>
+                            )}
+                            {el.comments && (
+                                <div>
+                                    <blockquote className="mt-6 border-l-2 pl-6 italic whitespace-pre-line">{el.comments}</blockquote>
+                                </div>
+                            )}
+                        </CardDescription>
+                    )}
                 </div>
             </CardHeader>
             <CardFooter className="pt-3 text-left">

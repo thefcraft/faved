@@ -22,7 +22,7 @@ export function DataTablePagination<TData>({
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between px-2 gap-2 sm:gap-0 my-5">
       <div className="flex-1 text-sm text-muted-foreground w-full sm:w-auto text-center sm:text-right pr-10">
-        {table.getFilteredRowModel().rows.length} item(s) total.
+        {table.getFilteredRowModel().rows.length} bookmark(s) total.
       </div>
       <div className="flex flex-wrap items-center justify-center sm:justify-end gap-4 w-full sm:w-auto">
         <div className="flex items-center space-x-2">
