@@ -106,7 +106,7 @@ const ActionsCell = observer(({ row }: { row: any }) => {
       <DropdownMenuTrigger asChild>
         <Button
           variant="secondary"
-          className="hover:text-accent-foreground data-[state=open]:bg-muted border text-muted-foreground flex size-8 hover-action cursor-pointer absolute "
+          className="hover:text-accent-foreground data-[state=open]:bg-muted border text-muted-foreground flex size-8 hover-action cursor-pointer "
           size="icon"
         >
           <IconDotsVertical />

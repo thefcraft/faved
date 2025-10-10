@@ -185,7 +185,7 @@ export const DataTable: React.FC = observer(() => {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="hover-action-container relative"
+                  className="hover-action-container"
                 >
                   {row.getVisibleCells().map((cell) => {
                     return (
