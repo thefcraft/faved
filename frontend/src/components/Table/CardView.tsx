@@ -11,20 +11,30 @@ import {
     IconDotsVertical,
 } from "@tabler/icons-react"
 import { observer } from "mobx-react-lite"
-import { Button } from "../ui/button";
+import { Button } from "../ui/button"
 import { ActionType } from "../dashboard/types"
 import { StoreContext } from "@/store/storeContext"
 import { TagBadge } from "./TagBadge"
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "../ui/alert-dialog"
 
 export const CardView: React.FC<{ el: any }> = observer(({ el }) => {
-    const store = React.useContext(StoreContext);
+    const store = React.useContext(StoreContext)
 
     return (
-        <div className='flex flex-col h-full hover-action-container'>
+        <div className="flex flex-col h-full hover-action-container min-h-[300px]">
             {el.image && (
                 <div className="mt-[-24px]">
-                    <a href={el.image} target='_blank'>
+                    <a href={el.image} target="_blank">
                         <img
                             className="w-full aspect-video mb-3 rounded-tl-[13px] rounded-tr-[13px] object-cover"
                             src={el.image}
@@ -32,7 +42,7 @@ export const CardView: React.FC<{ el: any }> = observer(({ el }) => {
                     </a>
                 </div>
             )}
-            <CardHeader>
+            <CardHeader className="flex-grow">
                 <CardAction>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -55,7 +65,9 @@ export const CardView: React.FC<{ el: any }> = observer(({ el }) => {
                             >
                                 Edit
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => { store.onCreateItem(el, true, false, null); }}>Make a copy</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => { store.onCreateItem(el, true, false, null) }}>
+                                Make a copy
+                            </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <div className="order-1 sm:order-2 w-full sm:w-auto">
                                 <AlertDialog>
@@ -91,7 +103,10 @@ export const CardView: React.FC<{ el: any }> = observer(({ el }) => {
                 <div className="flex flex-col items-start w-full text-left wrap-anywhere gap-2">
                     {el.title && (
                         <CardTitle>
-                            <h4 className="scroll-m-20 text-xl font-semibold tracking-tight line-clamp-3" title={el.title}>
+                            <h4
+                                className="scroll-m-20 text-xl font-semibold tracking-tight line-clamp-3"
+                                title={el.title}
+                            >
                                 {el.title}
                             </h4>
                         </CardTitle>
@@ -125,7 +140,9 @@ export const CardView: React.FC<{ el: any }> = observer(({ el }) => {
                             )}
                             {el.comments && (
                                 <div>
-                                    <blockquote className="mt-6 border-l-2 pl-6 italic whitespace-pre-line">{el.comments}</blockquote>
+                                    <blockquote className="mt-6 border-l-2 pl-6 italic whitespace-pre-line">
+                                        {el.comments}
+                                    </blockquote>
                                 </div>
                             )}
                         </CardDescription>
@@ -134,9 +151,11 @@ export const CardView: React.FC<{ el: any }> = observer(({ el }) => {
             </CardHeader>
             <CardFooter className="pt-3 text-left">
                 <div>
-                    <p className="text-muted-foreground text-sm"><small className="text-sm leading-none font-medium">Created at:</small> {el.created_at}</p>
+                    <p className="text-muted-foreground text-sm">
+                        <small className="text-sm leading-none font-medium">Created at:</small> {el.created_at}
+                    </p>
                 </div>
             </CardFooter>
         </div>
-    );
-});
+    )
+})
