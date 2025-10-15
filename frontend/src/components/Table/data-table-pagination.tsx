@@ -7,7 +7,6 @@ import {
 } from "lucide-react"
 import { Button } from "../ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
-import { getTableViewPreference } from "./utils"
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>
@@ -20,16 +19,15 @@ export function DataTablePagination<TData>({
   rowsPerPage,
   setRowsPerPage,
 }: DataTablePaginationProps<TData>) {
-  const footerText = getTableViewPreference() ? "Rows" : "Cards"
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between px-2 gap-2 sm:gap-0 my-5">
       <div className="flex-1 text-sm text-muted-foreground w-full sm:w-auto text-center sm:text-right pr-10">
-        {table.getFilteredRowModel().rows.length} bookmark(s) total.
+        {table.getFilteredRowModel().rows.length} item{table.getFilteredRowModel().rows.length !== 1 ? "s" : ""} total
       </div>
       <div className="flex flex-wrap items-center justify-center sm:justify-end gap-4 w-full sm:w-auto">
         <div className="flex items-center space-x-2">
-          <p className="text-sm font-medium hidden sm:block">{`${footerText} per page`}</p>
-          <p className="text-sm font-medium sm:hidden">{`${footerText}:`}</p>
+          <p className="text-sm font-medium hidden sm:block">Items per page</p>
+          <p className="text-sm font-medium sm:hidden">Items:</p>
           <Select
             value={rowsPerPage.toString()}
             onValueChange={(value) => {
