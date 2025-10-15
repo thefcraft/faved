@@ -78,12 +78,12 @@ const DescriptionCellContent = ({ item }: { item: z.infer<typeof schema> }) => {
         </a>
       )}
       {description && (
-        <p className="leading-7 [&:not(:first-child)]:mt-6 whitespace-pre-line break-words overflow-wrap-anywhere max-w-full">
+        <p className="leading-7 [&:not(:first-child)]:mt-6 whitespace-pre-line break-words max-w-full">
           {description}
         </p>
       )}
       {comments && (
-        <blockquote className="mt-6 border-l-2 pl-6 italic whitespace-pre-line break-words overflow-wrap-anywhere max-w-full">
+        <blockquote className="mt-6 border-l-2 pl-6 italic whitespace-pre-line break-words max-w-full">
           {comments}
         </blockquote>
       )}
@@ -111,8 +111,8 @@ const ActionsCell = observer(({ row }: { row: any }) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          variant="secondary"
-          className="hover:text-accent-foreground data-[state=open]:bg-muted border text-muted-foreground flex size-8 hover-action cursor-pointer "
+          variant="outline"
+          className="hover-action"
           size="icon"
         >
           <IconDotsVertical />

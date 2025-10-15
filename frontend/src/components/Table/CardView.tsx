@@ -31,9 +31,9 @@ export const CardView: React.FC<{ el: any }> = observer(({ el }) => {
     const store = React.useContext(StoreContext)
 
     return (
-        <div className="flex flex-col h-full hover-action-container min-h-[300px]">
+        <div className="flex flex-col h-full hover-action-container ">
             {el.image && (
-                <div className="mt-[-24px]">
+                <div className="-mt-6">
                     <a href={el.image} target="_blank">
                         <img
                             className="w-full aspect-video mb-3 rounded-tl-[13px] rounded-tr-[13px] object-cover"
@@ -47,8 +47,8 @@ export const CardView: React.FC<{ el: any }> = observer(({ el }) => {
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button
-                                variant="secondary"
-                                className="hover:text-accent-foreground data-[state=open]:bg-muted border text-muted-foreground flex size-8 hover-action cursor-pointer absolute top-2 right-2"
+                              variant="outline"
+                                className="absolute top-2 right-2 hover-action"
                                 size="icon"
                             >
                                 <IconDotsVertical />
