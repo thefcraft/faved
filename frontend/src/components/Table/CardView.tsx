@@ -36,7 +36,7 @@ export const CardView: React.FC<{ el: any }> = observer(({ el }) => {
                 <div className="-mt-6">
                     <a href={el.image} target="_blank">
                         <img
-                            className="w-full aspect-video mb-3 rounded-tl-[13px] rounded-tr-[13px] object-cover"
+                            className="w-full aspect-[1.91/1] mb-3 rounded-tl-[13px] rounded-tr-[13px] object-cover"
                             src={el.image}
                         />
                     </a>
