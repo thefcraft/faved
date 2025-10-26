@@ -8,7 +8,7 @@ import {StoreContext} from "@/store/storeContext"
 import {Loader2Icon} from "lucide-react"
 import {IconBrandChrome, IconBrandEdge, IconBrandFirefox, IconBrandPocket, IconBrandSafari} from "@tabler/icons-react";
 
-export const ImportModal = ({onSuccess}: { onSuccess?: () => void }) => {
+export const SettingsImport = ({onSuccess}: { onSuccess?: () => void }) => {
   const store = useContext(StoreContext);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -136,7 +136,7 @@ export const ImportModal = ({onSuccess}: { onSuccess?: () => void }) => {
               <ul className="ml-4 mt-3 list-disc space-y-2 text-sm">
                 <li>All browser bookmarks and folders.</li>
                 <li>Bookmark folders will be converted to tags.</li>
-                <li>Folder hierarchy will be preserved. Nested folder will become nested tags.</li>
+                <li>Folder hierarchy will be preserved. Nested folders will become nested tags.</li>
                 <li>All bookmarks will have "Imported from browser" tag.</li>
               </ul>
             </div>

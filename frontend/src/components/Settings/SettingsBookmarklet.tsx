@@ -6,7 +6,7 @@ import {Badge} from "@/components/ui/badge";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {useIsMobile} from "@/hooks/use-mobile.ts";
 
-const BookmarkletPage = ({onSuccess}: { onSuccess?: () => void }) => {
+export const SettingsBookmarklet = ({onSuccess}: { onSuccess?: () => void }) => {
   const [copied, setCopied] = useState(false);
   const bookmarkletRef = React.useRef(null);
   const isMobile = useIsMobile();
@@ -58,12 +58,12 @@ const BookmarkletPage = ({onSuccess}: { onSuccess?: () => void }) => {
     }
 
     const windowWidth = 700;
-    const windowHeight = 700;
+    const windowHeight = 760;
     const leftPos = Math.floor((screen.width - windowWidth) / 2);
     const topPos = Math.floor((screen.height - windowHeight) / 2);
     const windowProps = {
-      width: 700,
-      height: 700,
+      width: windowWidth,
+      height: windowHeight,
       left: leftPos,
       top: topPos,
       noopener: 0,
@@ -262,5 +262,3 @@ const BookmarkletPage = ({onSuccess}: { onSuccess?: () => void }) => {
     </div>
   );
 };
-
-export default BookmarkletPage;
