@@ -1,36 +1,21 @@
-import * as React from "react"
-import { useState } from "react"
-import {
-  IconCamera,
-  IconDashboard,
-  IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord,
-  IconHelp,
-  IconReport,
-  IconSearch,
-  IconSettings,
-} from "@tabler/icons-react"
+import * as React from 'react';
 
-import { NavMain } from "@/components/nav-main"
-import { NavUser } from "@/components/nav-user"
+import { NavMain } from '@/components/nav-main';
+import { NavUser } from '@/components/nav-user';
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from '@/components/ui/sidebar';
 
-import { StoreContext } from "@/store/storeContext.ts";
-import { observer } from "mobx-react-lite"
-import { SidebarTag } from "@/components/Sidebar/SidebarTag.tsx";
-import { PresetActions } from "../dashboard/PresetActions"
-import { TagType } from "@/types/types"
-
+import { StoreContext } from '@/store/storeContext.ts';
+import { observer } from 'mobx-react-lite';
+import { SidebarTag } from '@/components/Sidebar/SidebarTag.tsx';
+import { PresetActions } from '../dashboard/PresetActions';
+import { TagType } from '@/types/types';
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   allTags: Record<string, TagType>;
@@ -88,13 +73,9 @@ export const AppSidebar = observer(({ allTags, ...props }: AppSidebarProps) => {
       </SidebarHeader>
       <SidebarContent className="no-scrollbar">
         <NavMain />
-        <SidebarMenu>
-          {renderTag('0')}
-        </SidebarMenu>
+        <SidebarMenu>{renderTag('0')}</SidebarMenu>
       </SidebarContent>
-      <SidebarFooter>
-        {store.user && <NavUser username={store.user.username} />}
-      </SidebarFooter>
+      <SidebarFooter>{store.user && <NavUser username={store.user.username} />}</SidebarFooter>
     </Sidebar>
-  )
+  );
 });
