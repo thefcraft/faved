@@ -9,7 +9,7 @@ import { SettingsDialog } from '../Settings/SettingsDialog.tsx';
 import { TagType } from '@/types/types';
 import Loading from '@/components/Loading';
 import { EditItemDialog } from '@/components/EditForm/EditItemDialog.tsx';
-import { OnboardingBanner } from "@/components/OnboardingBanner/OnboardingBanner"
+import { OnboardingBanner } from '@/components/OnboardingBanner/OnboardingBanner';
 
 export const Page = observer(() => {
   const store = useContext(StoreContext);

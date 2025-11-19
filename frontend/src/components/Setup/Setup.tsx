@@ -34,15 +34,20 @@ export const Setup = observer(() => {
           <CardTitle className="text-lg">Welcome to Faved demo!</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-8">
-          <p>Before you can use the application, we need to set up the database with demo content. Click the button below to proceed.</p>
+          <p>
+            Before you can use the application, we need to set up the database with demo content. Click the button below
+            to proceed.
+          </p>
 
           <div className="bg-blue-100 p-4 rounded-lg  dark:bg-blue-600">
-            <p className="italic">All demo accounts are private. Feel free to add your own links - they will not be accessed by anyone except you.</p>
+            <p className="italic">
+              All demo accounts are private. Feel free to add your own links - they will not be accessed by anyone
+              except you.
+            </p>
             <br />
             <p className="italic">Demo accounts are deleted after 14 days.</p>
           </div>
-          <Button className="w-full" disabled={isLoading}
-                  onClick={submit}>
+          <Button className="w-full" disabled={isLoading} onClick={submit}>
             {isLoading ? 'Creating Database...' : 'Initialize Demo'}
           </Button>
         </CardContent>
