@@ -1,26 +1,26 @@
 <?php
 
-use Controllers\AuthController;
+use Controllers\AuthLoginController;
 use Controllers\AuthLogoutController;
-use Controllers\ImportPocketController;
 use Controllers\ImportBookmarksController;
+use Controllers\ImportPocketController;
 use Controllers\ItemsCreateController;
 use Controllers\ItemsDeleteController;
 use Controllers\ItemsGetController;
 use Controllers\ItemsUpdateController;
-use Controllers\UrlMetadataController;
-use Controllers\UserUsernameUpdateController;
+use Controllers\SetupDatabaseController;
 use Controllers\TagsController;
 use Controllers\TagsCreateController;
 use Controllers\TagsDeleteController;
 use Controllers\TagsUpdateColorController;
 use Controllers\TagsUpdatePinnedController;
 use Controllers\TagsUpdateTitleController;
+use Controllers\UrlMetadataController;
 use Controllers\UserCreateController;
 use Controllers\UserDeleteController;
 use Controllers\UserGetController;
 use Controllers\UserPasswordUpdateController;
-use Controllers\SetupDatabaseController;
+use Controllers\UserUsernameUpdateController;
 
 return [
 	'api' => [
@@ -60,8 +60,8 @@ return [
 			],
 		],
 		'auth' => [
-			'/' => [
-				'POST' => AuthController::class,
+			'login' => [
+				'POST' => AuthLoginController::class,
 			],
 			'logout' => [
 				'POST' => AuthLogoutController::class
