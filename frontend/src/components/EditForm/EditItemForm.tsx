@@ -26,6 +26,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { ImagePreview } from '@/components/EditForm/ImagePreview.tsx';
 import { toast } from 'sonner';
 import { Spinner } from '@/components/ui/spinner.tsx';
+import { Separator } from '@/components/ui/separator.tsx';
 
 interface EditItemFormProps {
   isCloseWindowOnSubmit: boolean;
@@ -158,7 +159,7 @@ const EditItemForm = ({ isCloseWindowOnSubmit }: EditItemFormProps) => {
       if (!processedUrl.startsWith('http://') && !processedUrl.startsWith('https://')) {
         throw new Error();
       }
-    } catch (error) {
+    } catch {
       toast.error('Please provide a valid URL starting with http or https.', { position: 'top-center' });
       return;
     }
@@ -244,7 +245,7 @@ const EditItemForm = ({ isCloseWindowOnSubmit }: EditItemFormProps) => {
   let imageUrl = form.watch('image');
   try {
     imageUrl = UrlSchema.parse(imageUrl);
-  } catch (error) {
+  } catch {
     /* empty */
   }
 
@@ -259,8 +260,6 @@ const EditItemForm = ({ isCloseWindowOnSubmit }: EditItemFormProps) => {
           </h2>
           <div className="py-4">
             <div className="space-y-4">
-              <div className="grid gap-3">{renderTextField('title', 'Title')}</div>
-
               <div className="grid gap-3">
                 <FormField
                   control={form.control}
@@ -304,9 +303,9 @@ const EditItemForm = ({ isCloseWindowOnSubmit }: EditItemFormProps) => {
                 />
               </div>
 
-              <div className="grid gap-3">{renderTextareaField('description', 'Description')}</div>
+              <div className="grid gap-3">{renderTextField('title', 'Title')}</div>
 
-              <div className="grid gap-3">{renderTextareaField('comments', 'Comments')}</div>
+              <div className="grid gap-3">{renderTextareaField('description', 'Description')}</div>
 
               <div className="flex flex-col sm:flex-row gap-3">
                 <div className="grow"> {renderTextField('image', 'Image URL')}</div>
@@ -314,6 +313,10 @@ const EditItemForm = ({ isCloseWindowOnSubmit }: EditItemFormProps) => {
                   <ImagePreview imageUrl={imageUrl} />
                 </div>
               </div>
+
+              <Separator className="my-5" />
+
+              <div className="grid gap-3">{renderTextareaField('comments', 'Notes')}</div>
 
               <div className="grid gap-3">{renderTagsField()}</div>
 
