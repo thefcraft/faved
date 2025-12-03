@@ -54,6 +54,7 @@ COPY --from=vite /app/dist public/dist
 COPY utils utils
 COPY views views
 COPY --from=composer /app/vendor vendor
+COPY init-demo-db.php .
 COPY sql-dumps sql-dumps
 
 RUN mkdir /var/www/html/storage && \
