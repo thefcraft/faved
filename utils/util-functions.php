@@ -4,6 +4,7 @@ namespace Utils;
 
 use Exception;
 use Framework\ServiceContainer;
+use GuzzleHttp\Client;
 use Models\Repository;
 use Models\TagCreator;
 
@@ -198,7 +199,7 @@ function createWelcomeContent($repository)
 		'Free open-source bookmark manager with customisable nested tags. Super fast and lightweight. All data is stored locally. - denho/faved',
 		'https://github.com/denho/faved',
 		'',
-		'https://repository-images.githubusercontent.com/995300772/35566533-7ffc-4101-a7ce-926f5d82b6ca',
+		'https://repository-images.githubusercontent.com/995300772/895299f8-4360-4b17-a87e-4be5fb8f7e94',
 		null
 	);
 	$repository->attachItemTags([$faved_tag_id]
@@ -244,6 +245,67 @@ function buildPublicUserObject(array $user): array
 		),
 	];
 }
+
+function getInstalledAppInfo(): ?array
+{
+	$info_file_path = ROOT_DIR . '/app-info.json';
+	$data = file_exists($info_file_path) ? file_get_contents($info_file_path) : '';
+	$data = json_decode($data, true);
+	return $data;
+}
+
+function getAppUpdateInfo(): ?array
+{
+	try {
+		// Check cache first
+		$cache_file_path = sys_get_temp_dir() . '/app-update-info-cache.json';
+		$cache_period = 60 * 60 * 12; // 12 hours
+		$data = file_exists($cache_file_path) ? file_get_contents($cache_file_path) : '';
+		$data = json_decode($data, true);
+		$is_cache_expired = ($data['cache_timestamp'] ?? 0) + $cache_period < time();
+		if (!$is_cache_expired) {
+			return $data;
+		}
+
+		// Fetch new data
+		$data = fetchAppUpdateInfo();
+		if (!$data) {
+			return null;
+		}
+
+		// Store in cache
+		$data['cache_timestamp'] = time();
+		file_put_contents($cache_file_path, json_encode($data), LOCK_EX);
+
+		return $data;
+	} catch (Exception $e) {
+		return null;
+	}
+}
+
+function fetchAppUpdateInfo(): ?array
+{
+	$client = new Client();
+	$url = 'https://api.faved.dev/v1/app/update-info';
+
+	$app_info = getInstalledAppInfo();
+	$installed_version = $app_info['version'] ?? 'unknown';
+
+	$response = $client->get($url, [
+		'headers' => [
+			'Accept' => 'application/json',
+			'User-Agent' => "Faved/{$installed_version} (VersionCheck)",
+		],
+		'timeout' => 15,
+	]);
+
+	if ($response->getStatusCode() !== 200) {
+		return null;
+	}
+
+	return json_decode($response->getBody(), true);
+}
+
 
 function createDemoContent($repository)
 {

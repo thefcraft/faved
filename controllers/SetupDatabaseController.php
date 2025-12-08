@@ -3,6 +3,7 @@
 namespace Controllers;
 
 use Config;
+use Framework\ControllerInterface;
 use Framework\Exceptions\DatabaseNotFound;
 use Framework\Responses\ResponseInterface;
 use Framework\ServiceContainer;
@@ -12,7 +13,7 @@ use function Framework\data;
 use function Utils\createDemoContent;
 use function Utils\createWelcomeContent;
 
-class SetupDatabaseController
+class SetupDatabaseController implements ControllerInterface
 {
 	public function __invoke(array $input): ResponseInterface
 	{

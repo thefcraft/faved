@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Bookmark, ChevronLeft, ChevronRight, Import, Keyboard } from 'lucide-react';
+import { Bookmark, ChevronLeft, ChevronRight, Import, InfoIcon, Keyboard } from 'lucide-react';
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
@@ -11,73 +11,88 @@ import { SettingsImport } from './SettingsImport';
 
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-
-const data = {
-  nav: [
-    { id: 'auth', title: 'Authentication', icon: Keyboard, component: <SettingsAuth /> },
-    { id: 'bookmarklet', title: 'Bookmarklet', icon: Bookmark, component: <SettingsBookmarklet /> },
-    { id: 'import', title: 'Import', icon: Import, component: <SettingsImport /> },
-  ],
-};
+import { SettingsAbout } from '@/components/Settings/SettingsAbout.tsx';
 
 export const SettingsDialog = observer(() => {
   const store = React.useContext(StoreContext);
 
-  const defaultNav = store.preSelectedItemSettingsModal ?? data.nav[0].id;
+  const navLinks = [
+    { id: 'auth', title: 'Authentication', icon: Keyboard, component: <SettingsAuth />, warningMessage: null },
+    {
+      id: 'bookmarklet',
+      title: 'Bookmarklet',
+      icon: Bookmark,
+      component: <SettingsBookmarklet />,
+      warningMessage: null,
+    },
+    { id: 'import', title: 'Import', icon: Import, component: <SettingsImport />, warningMessage: null },
+    {
+      id: 'about',
+      title: 'About',
+      icon: InfoIcon,
+      component: <SettingsAbout />,
+      warningMessage: store.appInfo?.update_available ? 'Update available' : null,
+    },
+  ];
+
+  const defaultNav = store.preSelectedItemSettingsModal ?? navLinks[0].id;
 
   const [showTopNav, setShowTopNav] = React.useState(!store.preSelectedItemSettingsModal);
 
   // For title display
   const [selectedNav, setSelectedNav] = React.useState(defaultNav);
-  const selectedNavTitle = data.nav.find((item) => item.id === selectedNav)?.title;
+  const selectedNavTitle = navLinks.find((item) => item.id === selectedNav)?.title;
 
   return (
     <Dialog open={true} onOpenChange={store.setIsOpenSettingsModal}>
-      <DialogContent className="overflow-hidden w-[100dvw] md:w-[95dvw] max-w-6xl rounded-none md:rounded-lg p-0">
-        <div className="h-[100dvh] md:h-[95dvh] md:max-h-[1000px] p-3 pt-15 md:pt-3 relative">
-          <DialogHeader className="md:sr-only fixed w-full top-6">
+      <DialogContent className="w-[100dvw] max-w-6xl overflow-hidden rounded-none p-0 md:w-[95dvw] md:rounded-lg">
+        <div className="relative h-[100dvh] p-3 pt-15 md:h-[95dvh] md:max-h-[1000px] md:pt-3">
+          <DialogHeader className="fixed top-6 w-full md:sr-only">
             <DialogTitle className="text-center">{showTopNav ? 'Settings' : selectedNavTitle}</DialogTitle>
           </DialogHeader>
           <Tabs
             defaultValue={defaultNav}
             onValueChange={(v) => setSelectedNav(v)}
-            className="flex flex-row items-stretch justify-normal gap-0 w-full h-full "
+            className="flex h-full w-full flex-row items-stretch justify-normal gap-0"
           >
             <TabsList
               className={
-                'md:p-2 h-full w-full min-w-56 md:w-auto bg-transparent md:bg-muted flex-col items-stretch justify-start gap-1' +
+                'md:bg-muted h-full w-full min-w-56 flex-col items-stretch justify-start gap-1 bg-transparent md:w-auto md:p-2' +
                 (showTopNav ? ' inline-flex' : ' hidden md:inline-flex')
               }
             >
-              {data.nav.map((item) => (
+              {navLinks.map((item) => (
                 <TabsTrigger
                   key={item.id}
-                  className="py-2 px-3 text-base md:text-sm md:py-1 flex items-center gap-3 justify-start items-center rounded-sm flex-0 data-[state=active]:shadow-none md:data-[state=active]:bg-primary/90 md:data-[state=active]:text-primary-foreground hover:bg-primary/5"
+                  className={
+                    'md:data-[state=active]:bg-primary/90 md:data-[state=active]:text-primary-foreground md:hover:bg-primary/5 dark:data-[state=active]:bg-background dark:text-accent-foreground dark:data-[state=active]:text-accent-foreground flex flex-0 items-center justify-start gap-3 rounded-sm px-3 py-2 text-base data-[state=active]:shadow-none md:py-1 md:text-sm dark:data-[state=active]:border-0 dark:data-[state=active]:shadow-none' +
+                    (item.warningMessage ? ' text-yellow-700 dark:text-yellow-400' : '')
+                  }
                   value={item.id}
                   onClick={() => {
                     setShowTopNav(false);
                   }}
                 >
                   <item.icon />
-                  <span>{item.title}</span>
+                  <span>{item.warningMessage ?? item.title}</span>
                   <ChevronRight className="ml-auto block md:hidden" />
                 </TabsTrigger>
               ))}
             </TabsList>
             <div
               className={
-                'px-1 md:px-8 py-3 w-full h-full overflow-y-scroll overflow-x-hidden ' +
+                'h-full w-full overflow-x-hidden overflow-y-scroll px-1 py-3 md:px-8 ' +
                 (showTopNav ? ' hidden md:inline-flex' : '')
               }
             >
               <Button
                 onClick={() => setShowTopNav(true)}
                 variant="outline"
-                className="md:hidden rounded-full aspect-square w-10 h-10 fixed top-4 left-4 z-10"
+                className="fixed top-4 left-4 z-10 aspect-square h-10 w-10 rounded-full md:hidden"
               >
                 <ChevronLeft />
               </Button>
-              {data.nav.map((item) => {
+              {navLinks.map((item) => {
                 return (
                   <TabsContent key={item.id} value={item.id}>
                     {item.component}
