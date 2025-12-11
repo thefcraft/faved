@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { NavMain } from '@/components/nav-main';
-import { NavUser } from '@/components/nav-user';
+import { NavMain } from '@/components/Sidebar/NavMain.tsx';
+import { NavUser } from '@/components/Sidebar/NavUser.tsx';
 import {
   Sidebar,
   SidebarContent,
@@ -13,51 +13,15 @@ import {
 
 import { StoreContext } from '@/store/storeContext.ts';
 import { observer } from 'mobx-react-lite';
-import { SidebarTag } from '@/components/Sidebar/SidebarTag.tsx';
-import { PresetActions } from '../dashboard/PresetActions';
-import { TagType } from '@/types/types';
-import { Logo } from '@/layouts/Logo.tsx';
+import { SettingsButton } from './SettingsButton.tsx';
+import { Logo } from '@/components/Logo.tsx';
+import { ThemeToggler } from '@/components/Sidebar/ThemeToggler.tsx';
+import { NavTags } from '@/components/Sidebar/NavTags.tsx';
 
-interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
-  allTags: Record<string, TagType>;
-}
+type AppSidebarProps = React.ComponentProps<typeof Sidebar>;
 
-export const AppSidebar = observer(({ allTags, ...props }: AppSidebarProps) => {
+export const AppSidebar = observer(({ ...props }: AppSidebarProps) => {
   const store = React.useContext(StoreContext);
-  const selectedTag = store.selectedTagId ? allTags[store.selectedTagId] : null;
-
-  function renderTag(parentID: string | number, level = 0): React.JSX.Element[] {
-    const output: React.JSX.Element[] = [];
-    const tags = Object.values(allTags).filter((tag: TagType) => tag.parent === parentID);
-
-    tags.sort((a, b) => {
-      if (a.pinned && !b.pinned) return -1;
-      if (!a.pinned && b.pinned) return 1;
-      return a.title.localeCompare(b.title);
-    });
-
-    level++;
-
-    for (const tag of tags) {
-      const innerItems = renderTag(tag.id, level);
-      const isTagSelected = store.selectedTagId === tag.id;
-      const isChildTagSelected = !isTagSelected && selectedTag && selectedTag.fullPath.indexOf(tag.fullPath) === 0;
-
-      const code = (
-        <SidebarTag
-          key={tag.id}
-          tag={tag}
-          innerItems={innerItems}
-          level={level}
-          isTagSelected={isTagSelected}
-          isChildTagSelected={isChildTagSelected}
-        />
-      );
-      output.push(code);
-    }
-
-    return output;
-  }
 
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -65,13 +29,16 @@ export const AppSidebar = observer(({ allTags, ...props }: AppSidebarProps) => {
         <SidebarMenu>
           <SidebarMenuItem className="flex w-full justify-between">
             <Logo />
-            <PresetActions />
+            <div className="ml-auto flex items-center gap-0.5">
+              <ThemeToggler />
+              <SettingsButton />
+            </div>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent className="no-scrollbar">
+      <SidebarContent className="no-scrollbar gap-0">
         <NavMain />
-        <SidebarMenu>{renderTag('0')}</SidebarMenu>
+        <NavTags />
       </SidebarContent>
       <SidebarFooter>{store.user && <NavUser username={store.user.username} />}</SidebarFooter>
     </Sidebar>

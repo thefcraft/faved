@@ -160,3 +160,105 @@ a:hover {
     cursor: pointer;
   }
 }
+
+@layer components {
+  .sidebar-menu-action {
+    visibility: hidden;
+  }
+
+  [data-slot='sidebar-menu-item'] > .peer\/menu-button:hover ~ .sidebar-menu-action,
+  .sidebar-menu-action:hover,
+  .sidebar-menu-action[data-state='open'] {
+    visibility: visible;
+  }
+
+  /*Show dots on selected menu*/
+  [data-selected='true'] > .sidebar-menu-action:not([data-state='open']):not(:hover) {
+    color: var(--color-accent) !important;
+  }
+
+  @media (any-pointer: coarse) {
+    .sidebar-menu-action {
+      visibility: visible !important;
+    }
+  }
+
+  .item-list--cards {
+    .item__image-container {
+      @apply -mt-6 -mr-6 -ml-6;
+    }
+
+    .item__image {
+      @apply aspect-[1.91/1] w-full rounded-tl-[13px] rounded-tr-[13px] object-cover;
+    }
+
+    .actions-container {
+      @apply absolute top-2 right-2;
+    }
+  }
+
+  .item-list--list {
+    @apply mt-0!;
+
+    .item__image-container {
+      @apply relative h-fit w-fit;
+    }
+
+    .item__image {
+      @apply h-auto max-h-[250px] w-auto rounded-sm;
+    }
+
+    .actions-container {
+      @apply absolute top-3 right-0 @2xl/main:top-6;
+    }
+  }
+
+  .item-list--table {
+    .item__image-container {
+      @apply flex items-center justify-center;
+    }
+
+    .item__image {
+      @apply h-auto max-h-[200px] w-auto min-w-[200px] rounded-sm;
+    }
+  }
+
+  .created_at-container,
+  .updated_at-container {
+    @apply mt-auto;
+  }
+
+  .created_at-container + .updated_at-container {
+    @apply -mt-1;
+  }
+}
+
+@layer utilities {
+  .hover-action {
+    visibility: hidden;
+  }
+
+  .hover-action-container:hover .hover-action,
+  .hover-action:hover,
+  .hover-action[data-state='open'] {
+    visibility: visible;
+  }
+
+  @media (any-pointer: coarse) {
+    .hover-action {
+      visibility: visible !important;
+    }
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+    /* WebKit (Chrome, Safari) */
+  }
+}

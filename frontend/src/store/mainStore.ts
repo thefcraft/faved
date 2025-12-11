@@ -1,8 +1,8 @@
 import { makeAutoObservable } from 'mobx';
 import { toast } from 'sonner';
 import { API_ENDPOINTS } from './api';
-import { ActionType } from '@/components/dashboard/types';
 import {
+  ActionType,
   CreateUserType,
   ItemType,
   LoginType,
@@ -11,7 +11,7 @@ import {
   UpdatePasswordType,
   UpdateUsernameType,
   UserType,
-} from '@/types/types';
+} from '@/lib/types.ts';
 
 const getCookie = (name: string) => {
   // Add a semicolon to the beginning of the cookie string to handle the first cookie
@@ -40,7 +40,6 @@ class mainStore {
   error: string | null = null;
   isOpenSettingsModal: boolean = false;
   preSelectedItemSettingsModal: string | null = null;
-  currentPage: number = 1;
   selectedTagId: string | null = '0'; // Default to '0' for no tag selected
   itemsOriginal: ItemType[] = [];
   isShowEditModal: boolean = false;
@@ -125,9 +124,6 @@ class mainStore {
   setIsShowEditModal = (val: boolean) => {
     this.isShowEditModal = val;
   };
-  setCurrentPage = (val: number) => {
-    this.currentPage = val;
-  };
   setItemsOriginal = (val: ItemType[]) => {
     this.itemsOriginal = val;
   };
@@ -160,7 +156,7 @@ class mainStore {
     this.isAuthRequired = val;
   };
   fetchTags = async () => {
-    this.runRequest(API_ENDPOINTS.tags.list, 'GET', {}, 'Error fetching tags').then((data) => {
+    return this.runRequest(API_ENDPOINTS.tags.list, 'GET', {}, 'Error fetching tags').then((data) => {
       if (data === null) {
         return;
       }
@@ -186,7 +182,7 @@ class mainStore {
       return;
     }
 
-    this.runRequest(API_ENDPOINTS.tags.deleteTag(tagID), 'DELETE', {}, 'Error deleting tag').finally(() => {
+    return this.runRequest(API_ENDPOINTS.tags.deleteTag(tagID), 'DELETE', {}, 'Error deleting tag').finally(() => {
       this.fetchTags();
       this.fetchItems();
     });
@@ -199,20 +195,26 @@ class mainStore {
     );
   };
   onChangeTagColor = async (tagID: string, color: string) => {
-    this.runRequest(API_ENDPOINTS.tags.updateColor(tagID), 'PATCH', { color }, 'Error updating tag color').finally(
-      () => {
-        const tag = { ...this.tags[tagID as unknown as number], color };
-        this.tags = { ...this.tags, [tagID]: tag };
-      }
-    );
+    return this.runRequest(
+      API_ENDPOINTS.tags.updateColor(tagID),
+      'PATCH',
+      { color },
+      'Error updating tag color'
+    ).finally(() => {
+      const tag = { ...this.tags[tagID as unknown as number], color };
+      this.tags = { ...this.tags, [tagID]: tag };
+    });
   };
   onChangeTagPinned = async (tagID: string, pinned: boolean) => {
-    this.runRequest(API_ENDPOINTS.tags.updatePinned(tagID), 'PATCH', { pinned }, 'Error updating tag pinned').finally(
-      () => {
-        const tag = { ...this.tags[tagID as unknown as number], pinned };
-        this.tags = { ...this.tags, [tagID]: tag };
-      }
-    );
+    return this.runRequest(
+      API_ENDPOINTS.tags.updatePinned(tagID),
+      'PATCH',
+      { pinned },
+      'Error updating tag pinned'
+    ).finally(() => {
+      const tag = { ...this.tags[tagID as unknown as number], pinned };
+      this.tags = { ...this.tags, [tagID]: tag };
+    });
   };
 
   setItems = (val: ItemType[]) => {
@@ -234,7 +236,7 @@ class mainStore {
     this.preSelectedItemSettingsModal = val;
   };
   fetchItems = async () => {
-    this.runRequest(API_ENDPOINTS.items.list, 'GET', {}, 'Failed to fetch items').then((data) => {
+    return this.runRequest(API_ENDPOINTS.items.list, 'GET', {}, 'Failed to fetch items').then((data) => {
       if (data === null) {
         return;
       }
@@ -395,7 +397,7 @@ class mainStore {
   };
 
   fetchUrlMetadata = async (url: string) => {
-    return await this.runRequest(API_ENDPOINTS.urlMetdata.fetch(url), 'GET', {}, 'Error fetching metadata from URL');
+    return this.runRequest(API_ENDPOINTS.urlMetdata.fetch(url), 'GET', {}, 'Error fetching metadata from URL');
   };
 
   getAppInfo = async () => {
