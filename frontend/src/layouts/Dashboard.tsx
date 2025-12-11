@@ -6,6 +6,7 @@ import { AppSidebar } from '@/components/Sidebar/AppSidebar.tsx';
 import { SettingsDialog } from '../components/Settings/SettingsDialog.tsx';
 import Loading from '@/layouts/Loading.tsx';
 import { EditItemDialog } from '@/components/EditItem/EditItemDialog.tsx';
+import { OnboardingBanner } from '@/components/OnboardingBanner/OnboardingBanner';
 
 export const Dashboard = observer(({ children }: { children: React.ReactNode }) => {
   const store = useContext(StoreContext);
@@ -37,6 +38,7 @@ export const Dashboard = observer(({ children }: { children: React.ReactNode }) 
       </SidebarProvider>
       {store.isShowEditModal && <EditItemDialog />}
       {store.isOpenSettingsModal && <SettingsDialog />}
+      <OnboardingBanner />
     </>
   );
 });
