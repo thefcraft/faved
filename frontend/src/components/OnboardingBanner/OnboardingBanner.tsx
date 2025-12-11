@@ -10,18 +10,18 @@ export const OnboardingBanner = () => {
   }
 
   return (
-    <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50">
-      <div className="bg-primary text-primary-foreground px-6 py-3 rounded-lg shadow-lg flex items-center gap-4 min-w-max">
+    <div className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 transform">
+      <div className="bg-primary text-primary-foreground flex min-w-max items-center gap-4 rounded-lg px-6 py-3 shadow-lg">
         <span className="text-sm font-medium">Walk through the onboarding</span>
         <Link
           to="/setup/auth"
-          className="bg-primary-foreground text-primary px-3 py-1 rounded text-sm font-medium hover:opacity-90 transition-opacity"
+          className="bg-primary-foreground text-primary rounded px-3 py-1 text-sm font-medium transition-opacity hover:opacity-90"
         >
           Start
         </Link>
         <button
           onClick={() => setIsVisible(false)}
-          className="text-primary-foreground hover:opacity-70 transition-opacity ml-2"
+          className="text-primary-foreground ml-2 transition-opacity hover:opacity-70"
           aria-label="Dismiss banner"
         >
           <X size={16} />
