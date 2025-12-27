@@ -12,22 +12,7 @@ import {
   UpdateUsernameType,
   UserType,
 } from '@/lib/types.ts';
-
-const getCookie = (name: string) => {
-  // Add a semicolon to the beginning of the cookie string to handle the first cookie
-  const cookieString = '; ' + document.cookie;
-
-  // Split the string at the specified cookie name
-  const parts = cookieString.split('; ' + name + '=');
-
-  // If the cookie was found (the array has more than one part)
-  if (parts.length === 2) {
-    // Return the value, which is everything after the '=' and before the next ';'
-    return parts.pop().split(';').shift();
-  }
-  // If the cookie was not found
-  return null;
-};
+import { getCookie } from '@/lib/utils.ts';
 
 class mainStore {
   items: ItemType[] = [];
@@ -41,7 +26,6 @@ class mainStore {
   isOpenSettingsModal: boolean = false;
   preSelectedItemSettingsModal: string | null = null;
   selectedTagId: string | null = '0'; // Default to '0' for no tag selected
-  itemsOriginal: ItemType[] = [];
   isShowEditModal: boolean = false;
   appInfo: {
     installed_version: string | null;
@@ -124,9 +108,6 @@ class mainStore {
   setIsShowEditModal = (val: boolean) => {
     this.isShowEditModal = val;
   };
-  setItemsOriginal = (val: ItemType[]) => {
-    this.itemsOriginal = val;
-  };
   setTags = (tags: TagsObjectType) => {
     const renderTagSegment = (tag: TagType) => {
       let output = '';
@@ -163,7 +144,7 @@ class mainStore {
       this.setTags(data);
     });
   };
-  onCreateTag = async (title: string) => {
+  createTag = async (title: string) => {
     let tagID = null;
 
     await this.runRequest(API_ENDPOINTS.tags.create, 'POST', { title }, 'Error creating tag')
@@ -172,7 +153,6 @@ class mainStore {
       })
       .finally(() => {
         this.fetchTags();
-        this.fetchItems();
       });
 
     return tagID;
@@ -241,14 +221,47 @@ class mainStore {
         return;
       }
       this.setItems(data);
-      this.setItemsOriginal(data);
     });
   };
-  onDeleteItem = async (id: number) => {
-    return this.runRequest(API_ENDPOINTS.items.deleteItem(id), 'DELETE', {}, 'Failed to delete item').finally(() => {
-      this.fetchItems();
-      this.fetchTags();
-    });
+  deleteItems = async (itemIds: number[]) => {
+    return await this.runRequest(
+      '/api/items/delete',
+      'POST',
+      {
+        'item-ids': itemIds,
+      },
+      'Failed to delete item'
+    );
+  };
+  refetchItemsMetadata = async (itemIds: number[]) => {
+    return await this.runRequest(
+      '/api/items/fetch-metadata',
+      'POST',
+      {
+        'item-ids': itemIds,
+      },
+      'Failed to fetch metadata'
+    );
+  };
+  updateItemsTags = async ({
+    itemIds,
+    newSelectedTagsAll,
+    newSelectedTagsSome,
+  }: {
+    itemIds: number[];
+    newSelectedTagsAll: string[];
+    newSelectedTagsSome: string[];
+  }) => {
+    return await this.runRequest(
+      '/api/items/tags',
+      'PATCH',
+      {
+        'item-ids': itemIds,
+        'tag-ids-all': newSelectedTagsAll.map((id) => parseInt(id, 10)),
+        'tag-ids-some': newSelectedTagsSome.map((id) => parseInt(id, 10)),
+      },
+      'Failed to update items tags'
+    );
   };
   onCreateItem = async (val: ItemType) => {
     return this.sendItemRequest(API_ENDPOINTS.items.createItem, 'POST', val);

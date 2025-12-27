@@ -169,12 +169,13 @@ class PocketImporter
 			fn($tag) => $tag['parent'] === $parent_tag_id
 		);
 		$existing_tags = array_column($existing_tags, 'id', 'title');
+		$existing_tags = array_change_key_case($existing_tags, CASE_LOWER);
 
 		$tag_map = [];
 		array_walk(
 			$tag_titles,
 			function ($tag_description, $tag_title) use ($existing_tags, $parent_tag_id, &$tag_map) {
-				$tag_map[$tag_title] = $existing_tags[$tag_title]
+				$tag_map[$tag_title] = $existing_tags[strtolower($tag_title)]
 					?? $this->tag_creator->createTag($tag_title, $tag_description, $parent_tag_id);
 			});
 
@@ -199,7 +200,7 @@ class PocketImporter
 				array_intersect_key($collection_map, array_flip($item['collections'])),
 				array_intersect_key($status_map, array_flip([$item['status']])),
 			);
-			$this->repository->attachItemTags($tag_ids, $item_id);
+			$this->repository->attachItemsTags([$item_id], $tag_ids);
 		});
 	}
 }

@@ -195,11 +195,13 @@ a:hover {
     .actions-container {
       @apply absolute top-2 right-2;
     }
+
+    .select-container {
+      @apply absolute top-2 left-2 z-40;
+    }
   }
 
   .item-list--list {
-    @apply mt-0!;
-
     .item__image-container {
       @apply relative h-fit w-fit;
     }
@@ -210,6 +212,10 @@ a:hover {
 
     .actions-container {
       @apply absolute top-3 right-0 @2xl/main:top-6;
+    }
+
+    .select-container {
+      @apply absolute top-1/2 left-0 -translate-y-1/2;
     }
   }
 
@@ -234,19 +240,20 @@ a:hover {
 }
 
 @layer utilities {
-  .hover-action {
-    visibility: hidden;
+  .onhover-visible {
+    @apply opacity-0 transition-opacity duration-100;
   }
 
-  .hover-action-container:hover .hover-action,
-  .hover-action:hover,
-  .hover-action[data-state='open'] {
-    visibility: visible;
+  .onhover-container:hover .onhover-visible,
+  .onhover-container:active .onhover-visible,
+  .onhover-visible:hover,
+  .onhover-visible[data-state='open'] {
+    @apply opacity-100;
   }
 
   @media (any-pointer: coarse) {
-    .hover-action {
-      visibility: visible !important;
+    .onhover-visible {
+      @apply opacity-100;
     }
   }
 

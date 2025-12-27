@@ -7,7 +7,9 @@ use Controllers\ImportBookmarksController;
 use Controllers\ImportPocketController;
 use Controllers\ItemsCreateController;
 use Controllers\ItemsDeleteController;
+use Controllers\ItemsFetchMetadataController;
 use Controllers\ItemsGetController;
+use Controllers\ItemsTagsUpdateController;
 use Controllers\ItemsUpdateController;
 use Controllers\SetupDatabaseController;
 use Controllers\TagsController;
@@ -26,10 +28,20 @@ use Controllers\UserUsernameUpdateController;
 return [
 	'api' => [
 		'items' => [
-			'GET' => ItemsGetController::class,
-			'POST' => ItemsCreateController::class,
-			'PATCH' => ItemsUpdateController::class,
-			'DELETE' => ItemsDeleteController::class,
+			'/' => [
+				'GET' => ItemsGetController::class,
+				'POST' => ItemsCreateController::class,
+				'PATCH' => ItemsUpdateController::class,
+			],
+			'delete' => [
+				'POST' => ItemsDeleteController::class,
+			],
+			'fetch-metadata' => [
+				'POST' => ItemsFetchMetadataController::class,
+			],
+			'tags' => [
+				'PATCH' => ItemsTagsUpdateController::class,
+			],
 		],
 		'tags' => [
 			'/' => [

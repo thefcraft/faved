@@ -51,6 +51,22 @@ class Repository
 		return $items_tags;
 	}
 
+	public function getItemsUrls(array $item_ids)
+	{
+		if (empty($item_ids)) {
+			return [];
+		}
+		$sql_in = implode(',', array_fill(0, count($item_ids), '?'));
+		$stmt = $this->pdo->prepare("SELECT id, url FROM items WHERE id IN ($sql_in)");
+		$stmt->execute($item_ids);
+
+		$items = [];
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$items[(int)$row['id']] = $row['url'];
+		}
+		return $items;
+	}
+
 	public function getUser(int $user_id)
 	{
 		$stmt = $this->pdo->prepare('SELECT * FROM users WHERE id = :user_id');
@@ -117,36 +133,58 @@ class Repository
 		]);
 	}
 
-	public function updateItemTags(array $item_tags, int $item_id)
+	public function setItemTags(array $tag_ids, int $item_id): bool
 	{
 		// 1. delete all tags relations
-		$this->deleteItemTags($item_id);
+		$result = $this->deleteItemsTags([$item_id], []);
+		if (false === $result) {
+			return false;
+		}
 
 		// 2. insert new tags relations
-		$this->attachItemTags($item_tags, $item_id);
+		return $this->attachItemsTags([$item_id], $tag_ids);
 	}
 
-	public function deleteItemTags(int $item_id)
+	public function deleteItemsTags(array $item_ids, array $except_tag_ids): bool
 	{
-		$stmt = $this->pdo->prepare('DELETE FROM items_tags WHERE item_id = :item_id');
-		$stmt->execute([':item_id' => $item_id]);
+		if (empty($item_ids)) {
+			return false;
+		}
+		$sql_in_item_ids = implode(',', array_fill(0, count($item_ids), '?'));
+		$sql_data = $item_ids;
+
+		if (!empty($except_tag_ids)) {
+			$sql_not_in_tag_ids = implode(',', array_fill(0, count($except_tag_ids), '?'));
+			$sql_not_in_tag_ids = " AND tag_id NOT IN ($sql_not_in_tag_ids)";
+			$sql_data = array_merge($sql_data, $except_tag_ids);
+		} else {
+			$sql_not_in_tag_ids = '';
+		}
+		$stmt = $this->pdo->prepare("DELETE FROM items_tags 
+		WHERE item_id IN ($sql_in_item_ids)
+		$sql_not_in_tag_ids");
+		return $stmt->execute($sql_data);
 	}
 
-	public function attachItemTags(array $item_tags, int $item_id)
+	public function attachItemsTags(array $item_ids, array $tag_ids): bool
 	{
-		if (empty($item_tags)) {
-			return;
+		if (empty($tag_ids)) {
+			return true;
 		}
 
 		$sql_data = [];
 
-		foreach ($item_tags as $tag_id) {
-			array_push($sql_data, $item_id, (int)$tag_id);
+		foreach ($item_ids as $item_id) {
+			foreach ($tag_ids as $tag_id) {
+				array_push($sql_data, $item_id, (int)$tag_id);
+			}
 		}
 
-		$sql = 'INSERT INTO items_tags (item_id, tag_id) VALUES ' . implode(',', array_fill(0, count($sql_data) / 2, '(?, ?)'));
+		$sql = 'INSERT  
+		INTO items_tags (item_id, tag_id) 
+		VALUES ' . implode(',', array_fill(0, count($sql_data) / 2, '(?, ?)'));
 		$stmt = $this->pdo->prepare($sql);
-		$stmt->execute($sql_data);
+		return $stmt->execute($sql_data);
 	}
 
 	public function createItem($title, $description, $url, $comments, $image, $created_at = null)
@@ -180,6 +218,29 @@ class Repository
 			':image' => $image,
 			':updated_at' => date('Y-m-d H:i:s'),
 			':id' => $item_id,
+		]);
+	}
+
+	public function updateItemsMetadata($title, $description, $image, $item_ids)
+	{
+		if (empty($item_ids)) {
+			return false;
+		}
+		$sql_in = implode(',', array_fill(0, count($item_ids), '?'));
+		$stmt = $this->pdo->prepare(
+			"UPDATE items 
+			SET title = ?, 
+				description = ?, 
+				image = ?, 
+				updated_at = ?
+    		WHERE id IN ($sql_in)"
+		);
+		return $stmt->execute([
+			$title,
+			$description,
+			$image,
+			date('Y-m-d H:i:s'),
+			...$item_ids,
 		]);
 	}
 
@@ -264,11 +325,15 @@ class Repository
 	}
 
 
-	public function deleteItem($item_id)
+	public function deleteItems(array $item_ids): bool
 	{
-		$stmt = $this->pdo->prepare("DELETE FROM items WHERE id = :item_id");
+		if (empty($item_ids)) {
+			return false;
+		}
+		$sql_in = implode(',', array_fill(0, count($item_ids), '?'));
+		$stmt = $this->pdo->prepare("DELETE FROM items WHERE id IN ($sql_in)");
 
-		return $stmt->execute([':item_id' => $item_id]);
+		return $stmt->execute($item_ids);
 
 	}
 
@@ -347,22 +412,6 @@ class Repository
 		}
 	}
 
-	public function checkTagIndexExists()
-	{
-		$stmt = $this->pdo->query("SELECT 1 FROM sqlite_master WHERE type = 'index' AND name = 'idx_tags_title_parent' AND tbl_name = 'tags';");
-		return (bool)$stmt->fetchColumn();
-
-	}
-	public function createTagIndex()
-	{
-		try {
-			$this->pdo->exec('CREATE UNIQUE INDEX "idx_tags_title_parent" ON tags(title COLLATE NOCASE ASC, parent COLLATE BINARY ASC);');
-			return true;
-		} catch (Exception $e) {
-			return false;
-		}
-	}
-
 	/**
 	 * Check if users table exists
 	 *
@@ -389,6 +438,23 @@ class Repository
 				created_at TEXT DEFAULT(NULL),
 				updated_at TEXT DEFAULT(NULL)
 			)');
+			return true;
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+
+	public function checkTagIndexExists()
+	{
+		$stmt = $this->pdo->query("SELECT 1 FROM sqlite_master WHERE type = 'index' AND name = 'idx_tags_title_parent' AND tbl_name = 'tags';");
+		return (bool)$stmt->fetchColumn();
+
+	}
+
+	public function createTagIndex()
+	{
+		try {
+			$this->pdo->exec('CREATE UNIQUE INDEX "idx_tags_title_parent" ON tags(title COLLATE NOCASE ASC, parent COLLATE BINARY ASC);');
 			return true;
 		} catch (Exception $e) {
 			return false;
