@@ -5,6 +5,7 @@ import { IconX } from '@tabler/icons-react';
 import { ImageOff } from 'lucide-react';
 import { cn } from '@/lib/utils.ts';
 import { Spinner } from '@/components/ui/spinner.tsx';
+import { API_ENDPOINTS } from '@/store/api';
 
 export const PreviewImage = ({
   imageUrl,
@@ -16,7 +17,7 @@ export const PreviewImage = ({
   className: string;
 }) => {
   const [isLoaded, setIsLoaded] = React.useState<boolean | null>(null); // null for loading in progress, true for success, false for failure
-  const urlObject = new URL('/content/fetch-image', window.location.origin);
+  const urlObject = new URL(API_ENDPOINTS.content.fetchImage, window.location.origin);
   urlObject.searchParams.set('image-url', encodeURI(imageUrl));
 
   if (itemId) {

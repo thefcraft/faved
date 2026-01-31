@@ -24,6 +24,9 @@ export const API_ENDPOINTS = {
     updateColor: (id: any) => `${API_BASE}/tags/update-color?tag-id=${id}`,
     updatePinned: (id: any) => `${API_BASE}/tags/update-pinned?tag-id=${id}`,
   },
+  url: {
+    fetchMetadata: `${API_BASE}/url/fetch-metadata`
+  },
   auth: {
     login: `${API_BASE}/auth/login`,
     logout: `${API_BASE}/auth/logout`,
@@ -36,4 +39,7 @@ export const API_ENDPOINTS = {
     browser: `${API_BASE}/import/bookmarks`,
   },
   appInfo: `${API_BASE}/app-info`,
+  content: {
+    fetchImage: `/content/fetch-image`
+  }
 };

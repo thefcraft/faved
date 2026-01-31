@@ -138,7 +138,7 @@ const columns: ColumnDef<ItemType>[] = [
         return true;
       }
 
-      return tags.includes(Number(filterValue) as unknown as number);
+      return tags.map(String).includes(filterValue); // NOTE: Number(filterValue) is not works for string tag id like uuid
     },
     cell: ({ row }) => {
       const tags = row.getValue('tags') as number[];

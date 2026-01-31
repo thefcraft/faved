@@ -111,7 +111,7 @@ class mainStore {
   setTags = (tags: TagsObjectType) => {
     const renderTagSegment = (tag: TagType) => {
       let output = '';
-      if (tag.parent !== '0') {
+      if (tag.parent && tag.parent !== '0') {
         const parentTag = Object.values(tags).find((t) => t.id.toString() === tag.parent.toString());
         if (parentTag) {
           output += renderTagSegment(parentTag) + '/';
@@ -126,7 +126,7 @@ class mainStore {
       tags[tagId] = {
         ...tags[tagId],
         id: tags[tagId].id.toString(),
-        parent: tags[tagId].parent.toString(),
+        parent: tags[tagId].parent?.toString() ?? '0', // NOTE: parent can be none so `0` is used as sentinel value for code compatibility.
         fullPath: renderTagSegment(tags[tagId]),
         pinned: !!tags[tagId].pinned,
       };
@@ -405,7 +405,7 @@ class mainStore {
 
   fetchUrlMetadata = async (url: string) => {
     return this.runRequest(
-      '/api/url/fetch-metadata',
+      API_ENDPOINTS.url.fetchMetadata,
       'POST',
       { url: encodeURI(decodeURI(url)) },
       'Error fetching metadata from URL'
